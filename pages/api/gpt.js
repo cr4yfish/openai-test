@@ -1,11 +1,4 @@
-const { Configuration, OpenAIApi } = require('openai');
 const { apiKey, organization } = require('./constants/api_key');
-const configuration = new Configuration({
-    apiKey: apiKey,
-    organization: organization
-});
-
-const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
 
@@ -26,8 +19,8 @@ export default async function handler(req, res) {
         }),
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer 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",
-            "Organization": "org-b7dpNp0b9T8SECJj23Gk5"
+            "Authorization": `Bearer ${apiKey}`,
+            "Organization": organization
         }
     })
     
