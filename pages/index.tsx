@@ -3,12 +3,10 @@ import * as React from 'react'
 import { MdSend, MdSettings } from "react-icons/md"
 import { v4 as uuidv4 } from 'uuid';
 
-import styles from '../styles/Home.module.css'
-
 import { Button, Input, Container, Loading, Card, Textarea, Modal, Dropdown } from "@nextui-org/react";
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
   fromUser: boolean;
 }
@@ -17,7 +15,7 @@ export default function Home() {
 
   const [inputText, setInputText] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const [history, setHistory] = React.useState(Array<Message>({ id: 0, text: "Hello, I'm a chatbot. Ask me anything.", fromUser: false}));
+  const [history, setHistory] = React.useState(Array<Message>({ id: "", text: "Hello, I'm a chatbot. Ask me anything.", fromUser: false}));
   const [modal, setModal] = React.useState(false);
   const [settings, setSettings] = React.useState<{
     apiKey: string;
