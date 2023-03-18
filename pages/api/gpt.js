@@ -1,37 +1,33 @@
-const { apiKey, organization } = require('./constants/api_key');
-
 export default async function handler(req, res) {
 
     const requestText = req.body.requestText;
+    const apiKey = req.body.apiKey;
+    const organization = req.body.organization;
+    const engine = req.body.engine;
     const translateTo = req.body.translateTo;
-    const model = req.body.model;
 
-    const response = await fetch("https://api.openai.com/v1/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         body: JSON.stringify({
-            model: model,
-            prompt: `Translate the following text into ${translateTo}: ${requestText}`,
-            temperature: 0.3,
-            max_tokens: 75,
-            top_p: 1,
-            frequency_penalty: 0.0,
-            presence_penalty: 0.0,
+            model: engine,
+            messages: [{"role": "user", "content": requestText}],
         }),
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${apiKey}`,
             "Organization": organization
         }
-    })
+    });
     
     const resJson = await response.json();
-
-    const data = resJson.choices[0].text;
+    console.log(resJson);
 
     console.log("=== new request ===");
-    console.log("Model:", model,
-    "requestText:", requestText,"translateTo:", translateTo, "ResponseData:", data);
-
-    res.status(200).json({ response: data});
+    console.log("requestText:", requestText,"translateTo:", translateTo, "ResponseData:", resJson);
+    if(resJson.error == "invalid_api_key") {
+        res.status(500).json({ response: resJson});
+        return;
+    }
+    res.status(200).json({ response: resJson});
   }
   
